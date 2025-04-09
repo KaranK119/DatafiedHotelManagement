@@ -7,14 +7,12 @@ import statsmodels.api as sm
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 import warnings
 
-# Settings
+
 warnings.filterwarnings('ignore')
 plt.rcParams["figure.figsize"] = (10, 6)
-
-# Title
 st.title("📊 SARIMAX Forecasting App for Facilities")
 
-# Load data
+# take in the data
 @st.cache_data
 def load_data():
     df = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
@@ -28,18 +26,16 @@ def load_data():
 
 df = load_data()
 
-# Facility selector
+# unique facilities to look through
 unique_facilities = df['FacilityID'].unique()
 selected_facility = st.selectbox("🏨 Select a Facility ID", unique_facilities)
-
-# Filter data
 df_facility = df[df['FacilityID'] == selected_facility].copy().sort_index()
 
-# Check if enough data
+
 if len(df_facility) < 30:
     st.warning("Not enough data for this facility to train SARIMAX model.")
 else:
-    # Prepare training and testing data
+    #features
     df_facility_m = df_facility[['Sold', 'Occ', 'ADR', 'RevPAR', 'F&B Revenue']]
     y = df_facility['TotalRevenue']
     X = df_facility_m
@@ -48,17 +44,15 @@ else:
     X_train, y_train = X[:train_len], y[:train_len]
     X_test, y_test = X[train_len:], y[train_len:]
 
-    # Train SARIMAX model
+    
     model = SARIMAX(y_train, exog=X_train, order=(7, 1, 7))
     results = model.fit(disp=0)
 
-    # Make predictions
+    #Make predictions
     start = len(X_train)
     end = len(X_train) + len(X_test) - 1
     predictions = results.predict(start=start, end=end, exog=X_test)
     predictions.index = y_test.index
-
-    # Plotting
     st.subheader(f"SARIMAX Forecast for Facility {selected_facility}")
     fig, ax = plt.subplots()
     ax.plot(y_train, label='Train')
