@@ -34,7 +34,7 @@ selected_facility = st.selectbox("🏨 Select a Facility ID", unique_facilities)
 df_facility = df[df['FacilityID'] == selected_facility].copy().sort_index()
 
 
-if len(df_  facility) < 30:
+if len(df_facility) < 30:
     st.warning("Not enough data for this facility to train SARIMAX model.")
 else:
     #features
