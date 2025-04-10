@@ -13,10 +13,15 @@ plt.rcParams["figure.figsize"] = (10, 6)
 st.title("📊Datafied Hotel Management")
 #Graph to predict last bit of 2024 revenue ---
 
-st.title("📊SARIMAX Predicting for Facility Revenue")
+st.title("SARIMAX Predicting for Facility Revenue")
 # take in the data
 @st.cache_data
 def load_data():
+    
+
+    #IF DATASET needs to be changed please do so here---->>>> and upload to github with specific file name.
+
+
     df = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
     df['BusinessDate'] = pd.to_datetime(df['BusinessDate'])
     df['FacilityID'] = df['FacilityID'].astype(str).str[:-2]
@@ -79,7 +84,7 @@ import streamlit as st
 warnings.filterwarnings('ignore')
 
 #prepare
-df = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
+
 df['BusinessDate'] = pd.to_datetime(df['BusinessDate'])
 df['FacilityID'] = df['FacilityID'].astype(str).str[:-2]
 df['Revenue'] = df['Revenue'].str.replace(',', '').astype(float)
@@ -140,19 +145,25 @@ run_sarimax(facility_id)
 #still have to push to github
 
 #weekdays of all the facilities in given dataset.
+
+
+
+st.title('EDA (Explatory Data Analysis) of Weekdays of all Facilities Together')
+
+#libraries
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+#data prep
 
-df = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
 df['BusinessDate'] = pd.to_datetime(df['BusinessDate'])
 df['Weekday'] = df['BusinessDate'].dt.day_name()
 df['Occ'] = pd.to_numeric(df['Occ'], errors='coerce')
-
+#setting the parameters
 avg_occ_by_weekday = df.groupby('Weekday')['Occ'].mean().sort_values()
 day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 avg_occ_by_weekday = avg_occ_by_weekday.reindex(day_order)
-
+#making the graph
 fig, ax = plt.subplots(figsize=(10, 6))
 ax.bar(avg_occ_by_weekday.index, avg_occ_by_weekday.values, color='skyblue')
 ax.set_xlabel('Day of the Week', fontsize=14)
@@ -166,25 +177,25 @@ st.pyplot(fig)
 
 #revpar grid
 
-
+st.title('EDA (Explatory Data Analysis) of RevPAR of each Unique facility')
+#libraries
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
+#data prep
 
-df = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
 df['BusinessDate'] = pd.to_datetime(df['BusinessDate'])
 df['FacilityID'] = df['FacilityID'].astype(str).str[:-2]
 df['RevPAR'] = pd.to_numeric(df['RevPAR'], errors='coerce')
-
 unique_facilities = df['FacilityID'].unique()
+#making grid and dashboard feel
 n_facilities = len(unique_facilities)
-
 n_cols = 2
 n_rows = int(np.ceil(n_facilities / n_cols))
 fig, axs = plt.subplots(n_rows, n_cols, figsize=(14, n_rows * 3))
 axs = axs.flatten()
-
+#loop to get each distint graph
 for i, facility in enumerate(unique_facilities):
     df_fac = df[df['FacilityID'] == facility].sort_values('BusinessDate')
     axs[i].plot(df_fac['BusinessDate'], df_fac['RevPAR'], color='teal', linewidth=1)
@@ -192,12 +203,11 @@ for i, facility in enumerate(unique_facilities):
     axs[i].set_xlabel('Date')
     axs[i].set_ylabel('RevPAR')
     axs[i].tick_params(axis='x', rotation=45)
-
 for j in range(i + 1, len(axs)):
     fig.delaxes(axs[j])
-
 plt.tight_layout()
 st.pyplot(fig)
 
 
+#--- End of EDA(s)
 
