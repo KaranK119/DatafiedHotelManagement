@@ -64,6 +64,8 @@ else:
     fig, ax = plt.subplots()
     ax.plot(y_train, label='Train')
     ax.plot(y_test, label='Test')
+    ax.xlabel('Date')
+    ax.ylabel('Revenue')
     ax.plot(predictions, label='Predictions', linestyle='dashed')
     ax.legend()
     st.pyplot(fig)
