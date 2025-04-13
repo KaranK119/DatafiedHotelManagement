@@ -10,39 +10,38 @@ import warnings
 
 warnings.filterwarnings('ignore')
 plt.rcParams["figure.figsize"] = (10, 6)
-st.title("📊Datafied Hotel Management")
-#Graph to predict last bit of 2024 revenue ---
 
+st.title("📊Datafied Hotel Management")
 st.title("SARIMAX Predicting for Facility Revenue")
-# take in the data
+
+# Load and clean data
 @st.cache_data
 def load_data():
-    
-
-    #IF DATASET needs to be changed please do so here---->>>> and upload to github with specific file name.
-
-
     df = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
+    
+    # Normalize column names
+    df.columns = df.columns.str.strip()
+    
     df['BusinessDate'] = pd.to_datetime(df['BusinessDate'])
     df['FacilityID'] = df['FacilityID'].astype(str).str[:-2]
-    df['Revenue'] = df['Revenue'].str.replace(',', '').astype(float)
-    df['F&B Revenue'] = df['F&B Revenue'].str.replace(',', '').astype(float)
-    df['TotalRevenue'] = df['TotalRevenue'].str.replace(',', '').astype(float)
+    df['Revenue'] = df['Revenue'].astype(str).str.replace(',', '', regex=False).astype(float)
+    df['F&B Revenue'] = df['F&B Revenue'].astype(str).str.replace(',', '', regex=False).astype(float)
+    df['TotalRevenue'] = df['TotalRevenue'].astype(str).str.replace(',', '', regex=False).astype(float)
+    
     df.set_index('BusinessDate', inplace=True)
     return df
 
 df = load_data()
 
-# unique facilities to look through
+# Facility selection
 unique_facilities = df['FacilityID'].unique()
 selected_facility = st.selectbox("🏨 Select a Facility ID", unique_facilities)
 df_facility = df[df['FacilityID'] == selected_facility].copy().sort_index()
 
-
 if len(df_facility) < 30:
     st.warning("Not enough data for this facility to train SARIMAX model.")
 else:
-    #features
+    # Features and target
     df_facility_m = df_facility[['Sold', 'Occ', 'ADR', 'RevPAR', 'F&B Revenue']]
     y = df_facility['TotalRevenue']
     X = df_facility_m
@@ -51,25 +50,26 @@ else:
     X_train, y_train = X[:train_len], y[:train_len]
     X_test, y_test = X[train_len:], y[train_len:]
 
-    
+    # SARIMAX model
     model = SARIMAX(y_train, exog=X_train, order=(7, 1, 7))
     results = model.fit(disp=0)
 
-    #Make predictions
+    # Predictions
     start = len(X_train)
     end = len(X_train) + len(X_test) - 1
     predictions = results.predict(start=start, end=end, exog=X_test)
     predictions.index = y_test.index
+
+    # Plot
     st.subheader(f"SARIMAX Forecast for Facility {selected_facility}")
     fig, ax = plt.subplots()
     ax.plot(y_train, label='Train')
     ax.plot(y_test, label='Test')
-    ax.xlabel('Date')
-    ax.ylabel('Revenue')
     ax.plot(predictions, label='Predictions', linestyle='dashed')
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Revenue")
     ax.legend()
     st.pyplot(fig)
-
 
     #---End of code to predict that end of 2024 revenue
 
