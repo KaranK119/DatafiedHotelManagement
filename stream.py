@@ -85,11 +85,7 @@ warnings.filterwarnings('ignore')
 
 #prepare
 
-df['BusinessDate'] = pd.to_datetime(df['BusinessDate'])
-df['FacilityID'] = df['FacilityID'].astype(str).str[:-2]
-df['Revenue'] = df['Revenue'].str.replace(',', '').astype(float)
-df['F&B Revenue'] = df['F&B Revenue'].str.replace(',', '').astype(float)
-df['TotalRevenue'] = df['TotalRevenue'].str.replace(',', '').astype(float)
+
 df.set_index('BusinessDate', inplace=True)
 
 #unique ids
