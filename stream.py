@@ -71,7 +71,8 @@ else:
     ax.legend()
     st.pyplot(fig)
 
-    print("Here the strength of the model is depicted by predicting the revenue of various properties for the last stretch of the year from the data for 2021, 2022, 2023, and 2024.")
+st.write("Here the strength of the model is depicted by predicting the revenue of various properties for the last stretch of the year from the data for 2021, 2022, 2023, and 2024.")
+
 
     #---End of code to predict that end of 2024 revenue
 
@@ -139,7 +140,7 @@ def run_sarimax(facility_id):
 run_sarimax(facility_id)
 
 
-print("Here the model is forecasting for the beginning of 2025 from the data for 2021, 2022, 2023, and 2024.This insight can be used to undertstand what the year will bring in terms of revenue when upscaled with previous months 2025.")
+st.write("Here the model is forecasting for the beginning of 2025 from the data for 2021, 2022, 2023, and 2024.This insight can be used to undertstand what the year will bring in terms of revenue when upscaled with previous months 2025.")
 
 
 # End of the forcasting 30 days
@@ -178,7 +179,7 @@ plt.tight_layout()
 
 st.pyplot(fig)
 
-print("Showing a simple demonstration of what days bring in the most revenue for all properities combined.")
+st.write("Showing a simple demonstration of what days bring in the most revenue for all properities combined.")
 
 
 
@@ -215,6 +216,6 @@ for j in range(i + 1, len(axs)):
 plt.tight_layout()
 st.pyplot(fig)
 
-print("RevPAR fluctuations across the four years.")
+st.write("RevPAR fluctuations across the four years.")
 #--- End of EDA(s)
 
