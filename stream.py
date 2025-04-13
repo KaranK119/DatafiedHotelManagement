@@ -86,7 +86,7 @@ warnings.filterwarnings('ignore')
 #prepare
 
 
-df.set_index('BusinessDate', inplace=True)
+
 
 #unique ids
 unique_facilities = df["FacilityID"].unique()
@@ -151,21 +151,22 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 #data prep
-
-df['BusinessDate'] = pd.to_datetime(df['BusinessDate'])
-df['Weekday'] = df['BusinessDate'].dt.day_name()
-df['Occ'] = pd.to_numeric(df['Occ'], errors='coerce')
+ff = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
+ff['BusinessDate'] = pd.to_datetime(ff['BusinessDate'])
+ff['Weekday'] = ff['BusinessDate'].dt.day_name()
+ff['Occ'] = pd.to_numeric(ff['Occ'], errors='coerce')
 #setting the parameters
-avg_occ_by_weekday = df.groupby('Weekday')['Occ'].mean().sort_values()
+avg_occ_by_weekday = ff.groupby('Weekday')['Occ'].mean().sort_values()
 day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 avg_occ_by_weekday = avg_occ_by_weekday.reindex(day_order)
-#making the graph
+#making the graph p
 fig, ax = plt.subplots(figsize=(10, 6))
 ax.bar(avg_occ_by_weekday.index, avg_occ_by_weekday.values, color='skyblue')
 ax.set_xlabel('Day of the Week', fontsize=14)
 ax.set_ylabel('Average Occupancy Rate (%)', fontsize=14)
 ax.set_title('Average Occupancy Rate by Day of the Week', fontsize=16)
 plt.xticks(rotation=45)
+
 plt.tight_layout()
 
 st.pyplot(fig)
@@ -180,11 +181,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 #data prep
-
-df['BusinessDate'] = pd.to_datetime(df['BusinessDate'])
-df['FacilityID'] = df['FacilityID'].astype(str).str[:-2]
-df['RevPAR'] = pd.to_numeric(df['RevPAR'], errors='coerce')
-unique_facilities = df['FacilityID'].unique()
+gf = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
+gf['BusinessDate'] = pd.to_datetime(gf['BusinessDate'])
+gf['FacilityID'] = gf['FacilityID'].astype(str).str[:-2]
+gf['RevPAR'] = pd.to_numeric(gf['RevPAR'], errors='coerce')
+unique_facilities = gf['FacilityID'].unique()
 #making grid and dashboard feel
 n_facilities = len(unique_facilities)
 n_cols = 2
@@ -193,8 +194,8 @@ fig, axs = plt.subplots(n_rows, n_cols, figsize=(14, n_rows * 3))
 axs = axs.flatten()
 #loop to get each distint graph
 for i, facility in enumerate(unique_facilities):
-    df_fac = df[df['FacilityID'] == facility].sort_values('BusinessDate')
-    axs[i].plot(df_fac['BusinessDate'], df_fac['RevPAR'], color='teal', linewidth=1)
+    gf_fac = gf[gf['FacilityID'] == facility].sort_values('BusinessDate')
+    axs[i].plot(gf_fac['BusinessDate'], gf_fac['RevPAR'], color='teal', linewidth=1)
     axs[i].set_title(f'Facility {facility}')
     axs[i].set_xlabel('Date')
     axs[i].set_ylabel('RevPAR')
