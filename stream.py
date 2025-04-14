@@ -7,6 +7,8 @@ import statsmodels.api as sm
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 import warnings
 
+#Whatever formatted data is needed to be used change directory here:
+DATA = 'merged_data_2021_2022_2023_2024.csv'
 
 warnings.filterwarnings('ignore')
 plt.rcParams["figure.figsize"] = (10, 6)
@@ -17,7 +19,7 @@ st.title("SARIMAX Predicting for Facility Revenue")
 # Load and clean data
 @st.cache_data
 def load_data():
-    df = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
+    df = pd.read_csv('DATA')
     
     # Normalize column names
     df.columns = df.columns.str.strip()
@@ -159,7 +161,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 #data prep
-ff = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
+ff = pd.read_csv('DATA')
 ff['BusinessDate'] = pd.to_datetime(ff['BusinessDate'])
 ff['Weekday'] = ff['BusinessDate'].dt.day_name()
 ff['Occ'] = pd.to_numeric(ff['Occ'], errors='coerce')
@@ -192,7 +194,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 #data prep
-gf = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
+gf = pd.read_csv('DATA')
 gf['BusinessDate'] = pd.to_datetime(gf['BusinessDate'])
 gf['FacilityID'] = gf['FacilityID'].astype(str).str[:-2]
 gf['RevPAR'] = pd.to_numeric(gf['RevPAR'], errors='coerce')
