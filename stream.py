@@ -19,7 +19,7 @@ st.title("SARIMAX Predicting for Facility Revenue")
 # Load and clean data
 @st.cache_data
 def load_data():
-    df = pd.read_csv('DATA')
+    df = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
     
     # Normalize column names
     df.columns = df.columns.str.strip()
