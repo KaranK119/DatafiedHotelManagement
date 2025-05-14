@@ -8,7 +8,7 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 import warnings
 
 #Whatever formatted data is needed to be used change directory here:
-DATA = 'merged_data_2021_2022_2023_2024.csv'
+
 
 warnings.filterwarnings('ignore')
 plt.rcParams["figure.figsize"] = (10, 6)
@@ -161,7 +161,8 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 #data prep
-ff = pd.read_csv('DATA')
+ff = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
+
 ff['BusinessDate'] = pd.to_datetime(ff['BusinessDate'])
 ff['Weekday'] = ff['BusinessDate'].dt.day_name()
 ff['Occ'] = pd.to_numeric(ff['Occ'], errors='coerce')
@@ -194,7 +195,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 #data prep
-gf = pd.read_csv('DATA')
+gf = pd.read_csv('merged_data_2021_2022_2023_2024.csv')
 gf['BusinessDate'] = pd.to_datetime(gf['BusinessDate'])
 gf['FacilityID'] = gf['FacilityID'].astype(str).str[:-2]
 gf['RevPAR'] = pd.to_numeric(gf['RevPAR'], errors='coerce')
